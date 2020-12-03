@@ -1,0 +1,16 @@
+package http;
+
+import java.io.*;
+import java.net.Socket;
+
+public class HttpResponse{
+
+    public Writer getWriter(Socket connection, OutputStream raw) {
+        try {
+            raw = new BufferedOutputStream(connection.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  new OutputStreamWriter(raw);
+    }
+}

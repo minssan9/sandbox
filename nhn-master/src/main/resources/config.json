@@ -1,0 +1,75 @@
+[
+  {
+    "port": "80",
+    "rootDir": "/",
+    "errorsPages": [
+      {
+        "code": 403,
+        "location": "/error/403.html"
+      },
+      {
+        "code": 404,
+        "location": "/error/404.html"
+      },
+      {
+        "code": 500,
+        "location": "/error/500.html"
+      }
+    ],
+    "virtualHostList": [
+      {
+        "documentRoot": "/test",
+        "serverName": "test.com",
+        "errorPageList": [
+          {
+            "code": 403,
+            "location": "/error/403.html"
+          },
+          {
+            "code": 404,
+            "location": "/error/404.html"
+          },
+          {
+            "code": 405,
+            "location": "/error/405.html"
+          },
+          {
+            "code": 500,
+            "location": "/error/500.html"
+          }
+        ]
+      },
+      {
+        "documentRoot": "/dev",
+        "serverName": "dev.com",
+        "errorPageList": [
+          {
+            "code": 403,
+            "location": "/error/403.html"
+          },
+          {
+            "code": 404,
+            "location": "/error/404.html"
+          },
+          {
+            "code": 405,
+            "location": "/error/405.html"
+          },
+          {
+            "code": 500,
+            "location": "/error/500.html"
+          }
+        ]
+      }
+    ],
+    "serviceMapping": [
+      {
+        "serviceClass": "com.nhn.service.Hello",
+        "url": "/service"
+      },
+      {
+        "serviceClass": "com.nhn.service.TimeService",
+        "url": "/time"
+      }
+    ]
+    ]

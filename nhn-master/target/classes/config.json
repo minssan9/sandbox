@@ -1,0 +1,14 @@
+[
+  {
+    "port": "80",
+    "rootDir": "utf-8",
+    "errors": [
+      {
+        "file403": "403.html",
+        "file404": "404.html",
+        "file500": "500.html"
+      }
+    ],
+    "rootDir": "utf-8"
+  }
+]
