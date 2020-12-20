@@ -46,7 +46,7 @@ public class ServerApplication {
 			public void run(ApplicationArguments args) throws Exception {
 				LocalDateTime oldDateTime = LocalDateTime.now().minusDays(150);
 
-				stationService.patchDatabaseFromServer();
+//				stationService.patchDatabaseFromServer();
 			}
 		};
 	}

@@ -4,6 +4,7 @@ import com.mk.charger.station.Dto.StationSearchDto;
 import com.mk.charger.station.Service.StationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ class StationFunctionController {
 	String uploadFolder =
 			FILE_FOLDER_ROOT_PATH + "\\" + this.getClass().getAnnotation(RequestMapping.class).value()[0].replace("/", "\\") + "\\";
 
+	@Qualifier("stationServiceImpl")
 	@Autowired
 	private StationService stationService;
 
