@@ -3,6 +3,7 @@ package com.mk.charger.station.Domain;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,4 +36,7 @@ public class Station {
     private String statUpdDt;
     @Column(name = "powerType")
     private String powerType;
+
+    @OneToMany(mappedBy = "station")
+    private List<Charger> chargers;
  }

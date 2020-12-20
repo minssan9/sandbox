@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -28,6 +29,7 @@ public class PatchTest {
     StationService stationService;
 
     @Test
+    @Transactional()
     public void 공공데이터가져오기() throws Exception {
         JSONParser parser = new JSONParser();
         RestTemplate restTemplate = new RestTemplate();
