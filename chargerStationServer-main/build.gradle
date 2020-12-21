@@ -21,14 +21,13 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-//	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
 //	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 //	implementation 'org.springframework:spring-jdbc'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
-
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.5.6'
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.6.2'
 	compileOnly 'org.projectlombok:lombok'
 
 //	implementation 'commons-dbcp:commons-dbcp:1.4'

@@ -53,8 +53,8 @@ public class StationServiceImpl implements StationService {
 		String serviceKey =  "dKNTmNiGHpcJLrC4HIJc3nW4AaPPKOQLCvlzV7IQZDTTztv6PTuDusZxS8iC1vpBEtkLsnk97WEzKpEvf3Zqgg==";
 		String urlString = ("http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo");
 
-		for(int i = 1; i < 190; i++){
-			urlString = ("http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?serviceKey="+ serviceKey + "&pageNo=" + i + "&pageSize=100");
+		for(int i = 1; i < 2; i++){
+			urlString = ("http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?serviceKey="+ serviceKey + "&pageNo=" + i + "&pageSize=10");
 			getStationInfoFromGov(urlString);
 		}
 		return null;
@@ -113,7 +113,6 @@ public class StationServiceImpl implements StationService {
 		String nowDate =  LocalDateTime.now().format(dateFormatString);
 		String nowTime = LocalDateTime.now().format(timeFormatString);
 
-		stationRepository.save(station);
-		return station;
+		return stationRepository.save(station);
 	}
 }
