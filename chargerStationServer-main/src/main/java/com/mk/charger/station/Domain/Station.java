@@ -1,15 +1,20 @@
 package com.mk.charger.station.Domain;
 
-import lombok.Data;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.mk.charger.station.Enum.YNFlag;
+import  lombok.Data;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Entity
-@Table(name = "station", schema = "charger", catalog = "")
+@Table(name = "station")
 public class Station {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "station_id")
     private Long id;
 
     @Column(name = "statNm")
@@ -36,7 +41,11 @@ public class Station {
     private String statUpdDt;
     @Column(name = "powerType")
     private String powerType;
+    private String note;
+    private int zcode;
+    private String parkingFree;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "station")
-    private List<Charger> chargers;
- }
+    private List<Charger> chargers ;
+}
