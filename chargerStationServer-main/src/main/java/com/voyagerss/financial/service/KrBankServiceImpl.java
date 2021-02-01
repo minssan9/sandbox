@@ -1,6 +1,6 @@
 package com.voyagerss.financial.service;
 
-import com.voyagerss.financial.config.AppProperties;
+import com.voyagerss.financial.config.KrBankProperties;
 import com.voyagerss.financial.domain.KrBankData;
 import com.voyagerss.financial.domain.KrBankSchema;
 import com.voyagerss.financial.dto.KrBankRequest;
@@ -12,7 +12,7 @@ import java.util.List;
 
 class KrBankServiceImpl implements KrBankService {
     @Autowired
-    private AppProperties appProperties;
+    private KrBankProperties krBankProperties;
 
     @Autowired
     KrBankDataRepository krBankDataRepository;

@@ -2,8 +2,10 @@ package com.voyagerss.station.Dto;
 
 import com.voyagerss.station.Domain.Station;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
+@EqualsAndHashCode
 public class StationInfo extends Station {
     String statNm;
     String statId;

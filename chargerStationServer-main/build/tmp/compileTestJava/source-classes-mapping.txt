@@ -1,0 +1,6 @@
+com/voyagerss/financial/service/KrBankApiServiceTest.java
+ com.voyagerss.financial.service.KrBankApiServiceTest
+com/voyagerss/ServerApplicationTests.java
+ com.voyagerss.ServerApplicationTests
+com/voyagerss/station/Service/PatchTest.java
+ com.voyagerss.station.Service.PatchTest
