@@ -26,7 +26,7 @@ class SwaggerConfig {
                 .useDefaultResponseMessages(false)
                 .groupName(version)
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.minssan9.financial.krbank"))
+                .apis(RequestHandlerSelectors.basePackage("com.voyagerss.financial.krbank"))
                 .paths(PathSelectors.ant("/krbank/api/*"))
                 .build();
     }

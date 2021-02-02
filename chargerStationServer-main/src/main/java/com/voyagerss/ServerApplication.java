@@ -1,5 +1,6 @@
 package com.voyagerss;
 
+import com.voyagerss.financial.service.KrBankAPIBatchService;
 import com.voyagerss.financial.service.KrBankApiService;
 import com.voyagerss.station.Repository.ChargerRepository;
 import com.voyagerss.station.Repository.StationRepository;
@@ -47,7 +48,7 @@ public class ServerApplication {
     ChargerRepository chargerRepository;
 
     @Autowired
-    KrBankApiService krBankApiService;
+    KrBankAPIBatchService krBankAPIBatchService;
 
     @Value("${file.upload-dir}")
     public static String FILE_FOLDER_ROOT_PATH;
@@ -68,7 +69,7 @@ public class ServerApplication {
 //				Charger charger = new Charger(1, "asd", "asdda","N", Power, station  )
 //				chargerRepository.save()
 //                log.info();
-                krBankApiService.getKOSPI(todayString, todayString,1L,  100L);
+                krBankAPIBatchService.batchKOSPI(todayString);
             }
         };
     }

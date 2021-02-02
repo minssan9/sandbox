@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class KrBankApiServiceTest {
 
     @Autowired
-    KrBankApiService krBankApiService;
+    KrBankAPIBatchService krBankAPIBatchService;
 
     @Test
     void saveData() {
@@ -36,7 +36,7 @@ class KrBankApiServiceTest {
 
     @Test
     void getKOSPI() {
-        List<KrBankData> krBankDatas = krBankApiService.getKOSPI("20210101", "20210102", 1L, 100L);
+        List<KrBankData> krBankDatas =krBankAPIBatchService.batchKOSPI("20210108");
         assertNotNull(krBankDatas);
     }
 

@@ -13,13 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 class KrBankApiController {
     @Autowired
     private  KrBankApiService krBankApiService;
-
-    @GetMapping("kospi")
-    private ResponseEntity  getTemplates() {
-        return ResponseEntity
-            .ok()
-            .body(krBankApiService.getKOSPI("20201101", "20201120",1L ,1000L));
-    }
+ 
+//    @GetMapping("kospi")
+//    private ResponseEntity getTemplates() {
+//        return ResponseEntity.ok().body(krBankApiService.getKOSPI("20200101", "20201129", 1L, 1000L));
+//    }
 
 //    @GetMapping("schema/update")
 //    @LogExecutionTime

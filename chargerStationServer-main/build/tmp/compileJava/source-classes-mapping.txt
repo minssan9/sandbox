@@ -11,8 +11,6 @@ com/voyagerss/station/Domain/Station.java
  com.voyagerss.station.Domain.Station
 com/voyagerss/station/Service/StationServiceImpl.java
  com.voyagerss.station.Service.StationServiceImpl
-com/voyagerss/station/Dto/StationHeader.java
- com.voyagerss.station.Dto.StationHeader
 com/voyagerss/financial/config/KrBankProperties.java
  com.voyagerss.financial.config.KrBankProperties
 com/voyagerss/config/SwaggerConfig.java
@@ -29,8 +27,6 @@ com/voyagerss/financial/dto/StatisticSearch.java
  com.voyagerss.financial.dto.StatisticSearch
 com/voyagerss/station/Dto/StationSearchDto.java
  com.voyagerss.station.Dto.StationSearchDto
-com/voyagerss/station/Dto/StationInfo.java
- com.voyagerss.station.Dto.StationInfo
 com/voyagerss/ServerApplication.java
  com.voyagerss.ServerApplication
  com.voyagerss.ServerApplication$1
@@ -38,16 +34,18 @@ com/voyagerss/station/Repository/StationRepository.java
  com.voyagerss.station.Repository.StationRepository
 com/voyagerss/station/Service/StationService.java
  com.voyagerss.station.Service.StationService
-com/voyagerss/station/Dto/StationInfoFromGov.java
- com.voyagerss.station.Dto.StationInfoFromGov
 com/voyagerss/financial/dto/KrBankDataResponse.java
  com.voyagerss.financial.dto.KrBankDataResponse
 com/voyagerss/financial/controller/KrBankApiController.java
  com.voyagerss.financial.controller.KrBankApiController
 com/voyagerss/financial/domain/KrBankData.java
  com.voyagerss.financial.domain.KrBankData
+com/voyagerss/financial/service/KrBankAPIBatchService.java
+ com.voyagerss.financial.service.KrBankAPIBatchService
 com/voyagerss/station/Repository/ChargerRepository.java
  com.voyagerss.station.Repository.ChargerRepository
+com/voyagerss/financial/scheduler/KrBankScheduler.java
+ com.voyagerss.financial.scheduler.KrBankScheduler
 com/voyagerss/aop/LogExecutionTime.java
  com.voyagerss.aop.LogExecutionTime
 com/voyagerss/station/Controller/StationController.java
@@ -70,6 +68,8 @@ com/voyagerss/station/Enum/YNFlag.java
  com.voyagerss.station.Enum.YNFlag
 com/voyagerss/station/Dto/StationResponseFromGov.java
  com.voyagerss.station.Dto.StationResponseFromGov
+ com.voyagerss.station.Dto.StationResponseFromGov$StationHeader
+ com.voyagerss.station.Dto.StationResponseFromGov$StationInfoFromGov
 com/voyagerss/station/Controller/StationFunctionController.java
  com.voyagerss.station.Controller.StationFunctionController
 com/voyagerss/financial/domain/KrBankSchema.java

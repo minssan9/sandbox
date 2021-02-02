@@ -5,11 +5,7 @@ plugins {
 group = 'com.minssan9'
 version = '1.0-SNAPSHOT'
 
-//configurations {
-//    compileOnly {
-//        extendsFrom annotationProcessor
-//    }
-//}
+//buildDir('build')
 
 repositories {
     mavenCentral()
@@ -56,4 +52,10 @@ dependencies {
 
 test {
     useJUnitPlatform()
+}
+
+project.buildDir = '/build'
+jar {
+    archiveBaseName = 'charger'
+    archiveVersion =  '0.1.0'
 }

@@ -1,8 +1,7 @@
 package com.voyagerss.station.Service;
- 
-import com.voyagerss.station.Dto.StationInfo;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+
+import com.google.gson.Gson;
+import com.voyagerss.station.Dto.StationResponseFromGov;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.client.RestTemplate;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 
@@ -27,32 +25,24 @@ public class PatchTest {
     @Autowired
     StationService stationService;
 
-    @Test
-    @Transactional()
-    public void 공공데이터가져오기() throws Exception {
-        JSONParser parser = new JSONParser();
-        RestTemplate restTemplate = new RestTemplate();
+    @Autowired
+    Gson gson;
 
-        // 오브젝트로 결과값 받아오기
+    @Test
+    public void 공공데이터가져오기() {
+        RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
         HttpEntity entity = new HttpEntity("parameters", headers);
-
-//        stationInfoFromGovs = stationService.patchDatabaseFromServer();
 
         String serviceKey =  "dKNTmNiGHpcJLrC4HIJc3nW4AaPPKOQLCvlzV7IQZDTTztv6PTuDusZxS8iC1vpBEtkLsnk97WEzKpEvf3Zqgg==";
         String urlString = ("http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo");
         urlString = ("http://open.ev.or.kr:8080/openapi/services/EvCharger/getChargerInfo?serviceKey="+ serviceKey + "&pageNo=1&pageSize=100");
 
-        ResponseEntity<String> response  = restTemplate.exchange(urlString, HttpMethod.GET, entity, String.class);
+        ResponseEntity<String> response  = restTemplate.getForEntity(urlString, String.class);
+//
+        StationResponseFromGov responseFromGov= gson.fromJson(response.getBody(), StationResponseFromGov.class);
+        List<StationResponseFromGov.StationInfoFromGov> stationInfoFromGovs = responseFromGov.getItems();
 
-        JSONObject jsonObj = (JSONObject)parser.parse( response.getBody() );
-        String itemsJSON = jsonObj.get("items").toString();
-
-        JSONArray itemsJSONArray = (JSONArray) parser.parse(itemsJSON);
-        JSONObject itemsJSONObject = (JSONObject) itemsJSONArray.get(0);
-        List<StationInfo> items = (List<StationInfo>) itemsJSONObject.get("item");
-
-
-        Assert.assertNotNull(items);
+        Assert.assertNotNull(stationInfoFromGovs.get(0).getItem());
     }
 }

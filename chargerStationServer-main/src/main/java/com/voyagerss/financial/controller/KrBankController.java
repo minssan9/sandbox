@@ -21,11 +21,6 @@ class KrBankController {
     @Autowired
     private KrBankApiService krBankApiService ;
 
-    @GetMapping("kospi")
-    private ResponseEntity getTemplates() {
-        krBankApiService.getKOSPI("20200101", "20201129", 1L, 1000L);
-        return ResponseEntity.ok().body(StringBuilder.class);
-    }
 
     @GetMapping("schema/list/{statname}/{startPos}/{endPos}")
     private ResponseEntity getSchema(@PathVariable String statname, @PathVariable Long startPos, @PathVariable Long endPos ) {
