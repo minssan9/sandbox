@@ -70,6 +70,8 @@ public class ServerApplication {
 //				chargerRepository.save()
 //                log.info();
                 krBankAPIBatchService.batchKOSPI(todayString);
+                krBankAPIBatchService.batchSchema(todayString);
+
             }
         };
     }

@@ -20,11 +20,17 @@ public class KrBankAPIBatchService {
     @Autowired
     KrBankApiService krBankApiService;
 
-    void dailySave() {
+    public void dailySave() {
         List<KrBankSchema> krBankSchemas = krBankSchemaRepository.findAll();
         krBankSchemas.forEach(i -> {
             krBankApiService.batchData(new KrBankRequest(i));
         });
+    }
+
+    public List<KrBankSchema> batchSchema(String queryDate) {
+        return krBankApiService.batchSchema(
+                new KrBankRequest("", "", "", "", queryDate, queryDate, 1L, 1000L)
+        );
     }
 
     public List<KrBankData> batchKOSPI(String queryDate) {

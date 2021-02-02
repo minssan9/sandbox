@@ -44,37 +44,36 @@ public class KrBankApiService {
         krBankDatas.forEach(i -> krBankDataRepository.save(i));
         return krBankDatas;
     }
-
-    List<KrBankSchema> saveSchema(List<KrBankSchema> krBankSchemas) {
-        krBankSchemas.forEach(i -> krBankSchemaRepository.save(i));
-        return krBankSchemas;
-    }
-
     List<KrBankData> getDataFromAPI(KrBankRequest krBankRequest) {
         krBankRequest.setServiceName("StatisticSearch");
-
-        ResponseEntity<String> response = restTemplate.getForEntity(getUrlString(krBankRequest), String.class);
-        KrBankDataResponse krBankDataResponse = gson.fromJson(response.getBody(), KrBankDataResponse.class);
-
+//        ResponseEntity<String> response = restTemplate.getForEntity(getUrlString(krBankRequest), String.class);
+//        KrBankDataResponse krBankDataResponse = gson.fromJson(response.getBody(), KrBankDataResponse.class);
         List<KrBankData> krBankDatas = gson.fromJson(
                 restTemplate.getForEntity(getUrlString(krBankRequest), String.class).getBody(),
                 KrBankDataResponse.class
         ).getStatisticSearch().getRow();
         return krBankDatas;
     }
-
     public List<KrBankData> batchData(KrBankRequest krBankRequest) {
         return saveData(getDataFromAPI(krBankRequest));
     }
 
 
+
+    List<KrBankSchema> saveSchema(List<KrBankSchema> krBankSchemas) {
+        krBankSchemas.forEach(i -> krBankSchemaRepository.save(i));
+        return krBankSchemas;
+    }
     public List<KrBankSchema> getSchemaFromAPI(KrBankRequest krBankRequest) {
-        List<KrBankSchemaResponse> krBankSchemaResponses = new ArrayList<>();
         krBankRequest.setServiceName("StatisticTableList");
 
         ResponseEntity response = restTemplate.getForObject(getUrlString(krBankRequest), ResponseEntity.class);
         KrBankSchemaResponse krBankSchemaResponse = gson.fromJson(response.getBody().toString(), KrBankSchemaResponse.class);
         return krBankSchemaResponse.getKrBankSchemaResult().getKrBankSchema();
+    }
+
+    public List<KrBankSchema> batchSchema(KrBankRequest krBankRequest) {
+        return saveSchema(getSchemaFromAPI(krBankRequest));
     }
 
 
