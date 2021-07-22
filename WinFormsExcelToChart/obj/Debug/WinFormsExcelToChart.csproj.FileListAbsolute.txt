@@ -8,3 +8,13 @@ D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelT
 D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.CoreCompileInputs.cache
 D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.exe
 D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.pdb
+D:\repository\sandbox\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.exe.config
+D:\repository\sandbox\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.exe
+D:\repository\sandbox\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.pdb
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.AssemblyReference.cache
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.Properties.Resources.resources
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.GenerateResource.cache
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.CoreCompileInputs.cache
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.exe
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.pdb
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.ColumnData.resources
