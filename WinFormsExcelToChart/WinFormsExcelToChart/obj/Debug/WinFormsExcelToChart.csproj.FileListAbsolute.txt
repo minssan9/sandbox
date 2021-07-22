@@ -1,0 +1,10 @@
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.exe.config
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.exe
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\bin\Debug\WinFormsExcelToChart.pdb
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.AssemblyReference.cache
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.Form1.resources
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.Properties.Resources.resources
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.GenerateResource.cache
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.CoreCompileInputs.cache
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.exe
+D:\repository\WinFormsExcelToChart\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.pdb
