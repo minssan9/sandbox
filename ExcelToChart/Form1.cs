@@ -9,25 +9,41 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq; 
+using Newtonsoft.Json.Linq;
 
-namespace WinFormsExcelToChart
+namespace ExcelToChart
 {
-    public partial class form : Form
+    public partial class Form1 : Form
     {
 
         OpenFileDialog oFileDialog = new OpenFileDialog();
         BindingSource bindSource = new BindingSource();
 
-        public form()
+        private void form_Load(object sender, EventArgs e)
+        { 
+
+            DateTime limitDt = new DateTime(2021, 12, 31, 20, 22, 0, 0);
+            DateTime now = DateTime.Now;
+            if (DateTime.Compare(limitDt, now) < 0)
+            {
+                Application.Exit();
+                this.Close();
+                return;
+            }
+        }
+
+
+        public Form1()
         {
             InitializeComponent();
+
             this.ResizeRedraw = true;
             txtColumnHeader.Text = "Angle (°)";
         }
 
         private void openExcelFile_Click(object sender, EventArgs e)
         {
+
             List<String> filePaths = new List<String>();
             List<DataTable> dataTableList = new List<DataTable>();
             List<ColumnData> dataList = new List<ColumnData>();
@@ -53,7 +69,7 @@ namespace WinFormsExcelToChart
             foreach (ColumnData c in dataList)
             {
                 //if (c.header.Contains("Angle (°)"))
-                if (c.header.Contains(columnHeader)) 
+                if (c.header.Contains(columnHeader))
                 {
                     chart1.Series.Add(c.header);
                     chart1.Series[c.header].ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -168,22 +184,10 @@ namespace WinFormsExcelToChart
             //chart1.Height= form.ActiveForm.Height - 50;
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+
+        private void openExcelFile_Click_1(object sender, EventArgs e)
         {
 
-        }
-
-        private void form_Load(object sender, EventArgs e)
-        {
-
-            DateTime limitDt = new DateTime(2021, 12, 31, 20, 22, 0, 0);
-            DateTime now = DateTime.Now;
-            if (DateTime.Compare(limitDt, now) < 0)
-            {
-                Application.Exit();
-                this.Close();
-                return;
-            }
         }
     }
     public class ColumnData
@@ -209,5 +213,5 @@ namespace WinFormsExcelToChart
         public double value7 { get; set; }
         public double value8 { get; set; }
     }
-
 }
+

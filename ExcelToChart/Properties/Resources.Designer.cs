@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace WinFormsExcelToChart.Properties {
+namespace ExcelToChart.Properties {
     using System;
     
     
@@ -39,7 +39,7 @@ namespace WinFormsExcelToChart.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WinFormsExcelToChart.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("ExcelToChart.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -63,6 +63,31 @@ namespace WinFormsExcelToChart.Properties {
         /// <summary>
         ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
         /// </summary>
+        internal static byte[] ExcelToChart {
+            get {
+                object obj = ResourceManager.GetObject("ExcelToChart", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;configuration&gt;
+        ///    &lt;startup&gt; 
+        ///        &lt;supportedRuntime version=&quot;v4.0&quot; sku=&quot;.NETFramework,Version=v4.0&quot;/&gt;
+        ///    &lt;/startup&gt;
+        ///&lt;/configuration&gt;
+        ///과(와) 유사한 지역화된 문자열을 찾습니다.
+        /// </summary>
+        internal static string ExcelToChart_exe {
+            get {
+                return ResourceManager.GetString("ExcelToChart_exe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
+        /// </summary>
         internal static byte[] Newtonsoft_Json {
             get {
                 object obj = ResourceManager.GetObject("Newtonsoft_Json", resourceCulture);
@@ -77,65 +102,18 @@ namespace WinFormsExcelToChart.Properties {
         ///        &lt;name&gt;Newtonsoft.Json&lt;/name&gt;
         ///    &lt;/assembly&gt;
         ///    &lt;members&gt;
-        ///        &lt;member name=&quot;T:Newtonsoft.Json.Bson.BsonObjectId&quot;&gt;
+        ///        &lt;member name=&quot;T:Newtonsoft.Json.Bson.BsonReader&quot;&gt;
         ///            &lt;summary&gt;
-        ///            Represents a BSON Oid (object id).
+        ///            Represents a reader that provides fast, non-cached, forward-only access to serialized JSON data.
         ///            &lt;/summary&gt;
         ///        &lt;/member&gt;
-        ///        &lt;member name=&quot;P:Newtonsoft.Json.Bson.BsonObjectId.Value&quot;&gt;
+        ///        &lt;member name=&quot;P:Newtonsoft.Json.Bson.BsonReader.JsonNet35BinaryCompatibility&quot;&gt;
         ///            &lt;summary&gt;
-        ///            Gets or sets the value of the Oid.
-        ///            &lt;/summary&gt;
-        ///            &lt;value&gt;The value of the Oid.&lt;/value&gt;
-        ///        &lt;[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
+        ///            Gets or sets a value indicating whethe[나머지 문자열은 잘림]&quot;;과(와) 유사한 지역화된 문자열을 찾습니다.
         /// </summary>
         internal static string Newtonsoft_Json1 {
             get {
                 return ResourceManager.GetString("Newtonsoft_Json1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static byte[] WinFormsExcelToChart {
-            get {
-                object obj = ResourceManager.GetObject("WinFormsExcelToChart", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;configuration&gt;
-        ///    &lt;startup&gt; 
-        ///        &lt;supportedRuntime version=&quot;v4.0&quot; sku=&quot;.NETFramework,Version=v4.7.2&quot; /&gt;
-        ///    &lt;/startup&gt;
-        ///&lt;/configuration&gt;과(와) 유사한 지역화된 문자열을 찾습니다.
-        /// </summary>
-        internal static string WinFormsExcelToChart_exe {
-            get {
-                return ResourceManager.GetString("WinFormsExcelToChart_exe", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static byte[] WinFormsExcelToChart_exe1 {
-            get {
-                object obj = ResourceManager.GetObject("WinFormsExcelToChart_exe1", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   System.Byte[] 형식의 지역화된 리소스를 찾습니다.
-        /// </summary>
-        internal static byte[] WinFormsExcelToChart1 {
-            get {
-                object obj = ResourceManager.GetObject("WinFormsExcelToChart1", resourceCulture);
-                return ((byte[])(obj));
             }
         }
     }

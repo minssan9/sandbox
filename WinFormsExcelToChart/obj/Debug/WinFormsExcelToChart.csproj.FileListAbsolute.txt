@@ -18,3 +18,6 @@ D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj
 D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.exe
 D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.pdb
 D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.ColumnData.resources
+D:\repository\sandbox\WinFormsExcelToChart\bin\Debug\Newtonsoft.Json.dll
+D:\repository\sandbox\WinFormsExcelToChart\bin\Debug\Newtonsoft.Json.xml
+D:\repository\sandbox\WinFormsExcelToChart\obj\Debug\WinFormsExcelToChart.csproj.CopyComplete
