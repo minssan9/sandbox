@@ -21,11 +21,12 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
-ExcelToChart/obj
-ExcelToChart/bin
+job-ExcelToChart/obj
+job-ExcelToChart/bin
 */bin
-WinFormsExcelToChart/bin
-WinFormsExcelToChart/obj
-WinFormsExcelToChart/bin
-WinFormsExcelToChart/obj
+job-WinFormsExcelToChart/bin
+job-WinFormsExcelToChart/obj
+job-WinFormsExcelToChart/bin
+job-WinFormsExcelToChart/obj
 .idea
+.gradle

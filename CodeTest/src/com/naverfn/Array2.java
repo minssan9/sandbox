@@ -1,14 +1,14 @@
-package com.codility;
+package com.naverfn;
 
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 public class Array2 {
- 
+
     public int solution(int[] A) {
-        
-        // write your code in Java SE 8        
+
+        // write your code in Java SE 8
         if(A.length%2 !=1)return 0;
         int ret = 0 ;
         Set<Integer> saved = new HashSet<Integer>();
