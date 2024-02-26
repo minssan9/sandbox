@@ -31,3 +31,5 @@ WinFormsExcelToChart/obj
 WinFormsExcelToChart/bin
 WinFormsExcelToChart/obj
 .idea
+**/build
+**/.gradle
