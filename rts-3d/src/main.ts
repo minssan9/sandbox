@@ -2,9 +2,10 @@ import './style.css';
 import { FACTIONS, FACTION_IDS } from './data/factions.ts';
 import { createEconomy, tickEconomy, queueBuilding, queueUnit, moveWorker, releaseSupply, supplyCap, canAfford } from './sim/economy.ts';
 import {
-  createWorld, spawnStructure, spawnUnit, orderTeam, orderUnits, stepCombat, inCombat,
-  possessedMove, possessedFire, HQ_POS, RALLY_POS,
+  initCombatCore, createWorld, destroyWorld, spawnStructure, spawnUnit, orderTeam, orderUnits, stepCombat, inCombat,
+  possessedMove, possessedFire, setPossessed, HQ_POS, RALLY_POS,
 } from './sim/combat.ts';
+import combatWasmUrl from './sim/wasm/combat_core.wasm?url';
 import type { CombatEvent, Entity } from './sim/combat.ts';
 import { createAI, tickAI } from './sim/ai.ts';
 import { createBaseView } from './view/base2d.ts';
@@ -125,11 +126,11 @@ function startGame(playerFaction: FactionId): void {
     onPossess: (prevId, nextId) => {
       const prev = byId(prevId);
       if (prev) {
-        prev.possessed = false;
+        setPossessed(world, prev.id, false);
         orderUnits(world, [prev.id], { mode: 'hold' }); // 빙의 해제 후 그 자리 방어
       }
       const next = byId(nextId);
-      if (next) next.possessed = true;
+      if (next) setPossessed(world, next.id, true);
       lastCommandAt = elapsed;
     },
   });
@@ -233,7 +234,17 @@ function startGame(playerFaction: FactionId): void {
     ov.classList.remove('hidden');
     ov.innerHTML = `<div><h2>${won ? '승리' : '패배'}</h2><p>${fmtTime(elapsed)} 경과</p>
       <button class="primary">다시 하기</button></div>`;
-    ov.querySelector('button')!.addEventListener('click', showFactionSelect);
+    ov.querySelector('button')!.addEventListener('click', () => {
+      destroyWorld(world); // Rust 쪽 메모리 해제
+      // Rust 전투 코어(WASM)를 불러온 뒤 시작
+fetch(combatWasmUrl)
+  .then((r) => r.arrayBuffer())
+  .then(initCombatCore)
+  .then(showFactionSelect)
+  .catch((err: unknown) => {
+    app.innerHTML = `<div class="select"><h1>로딩 실패</h1><p>전투 코어(WASM)를 불러오지 못했습니다: ${String(err)}</p></div>`;
+  });
+    });
   }
 
   // ---------- 루프 ----------
@@ -263,7 +274,7 @@ function startGame(playerFaction: FactionId): void {
       if (mode === 'battle' && me) {
         const input = battle.fpsInput();
         if (input.active) lastCommandAt = elapsed;
-        possessedMove(me, input.dx, input.dz, dt);
+        possessedMove(world, me, input.dx, input.dz, dt);
         if (input.firing) {
           const r = possessedFire(world, me, battle.aimTarget());
           if (r.ok) { events.push(r.event); battle.feedback('hit'); }
@@ -316,4 +327,11 @@ function startGame(playerFaction: FactionId): void {
   requestAnimationFrame(frame);
 }
 
-showFactionSelect();
+// Rust 전투 코어(WASM)를 불러온 뒤 시작
+fetch(combatWasmUrl)
+  .then((r) => r.arrayBuffer())
+  .then(initCombatCore)
+  .then(showFactionSelect)
+  .catch((err: unknown) => {
+    app.innerHTML = `<div class="select"><h1>로딩 실패</h1><p>전투 코어(WASM)를 불러오지 못했습니다: ${String(err)}</p></div>`;
+  });

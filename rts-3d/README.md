@@ -1,7 +1,7 @@
 # Three Fronts
 
 2D로 운영하고, 교전이 벌어지면 3D 1인칭으로 아군 유닛에 빙의해 직접 싸우는 비대칭 3종족 RTS 프로토타입입니다.
-TypeScript + Three.js + Vite로 만들었습니다.
+TypeScript + Three.js + Vite로 만들었고, **전투 연산은 Rust를 WebAssembly로 컴파일해 실행**합니다.
 장르 공통 구조(자원 2종, 인구수, 실드/방어력, 공격 타입×크기 배율)를 쓰고, 종족·유닛·수치·아트는 모두 오리지널입니다.
 
 ## 실행
@@ -9,11 +9,47 @@ TypeScript + Three.js + Vite로 만들었습니다.
 ```bash
 cd rts-3d
 npm install
-npm run dev     # http://localhost:5173
-npm test        # 시뮬레이션 단위 테스트 (Node 22.18+의 TypeScript 직접 실행 사용)
-npm run typecheck
-npm run build   # tsc 타입 검사 + 번들
+npm run dev          # http://localhost:5173
+npm test             # TS 테스트 (실제 WASM 바이너리 사용, Node 22.18+)
+npm run test:rust    # Rust 단위 테스트
+npm run build        # tsc 타입 검사 + 번들
 ```
+
+빌드된 `src/sim/wasm/combat_core.wasm`이 저장소에 포함돼 있어서, Rust가 없어도 바로 실행할 수 있습니다.
+전투 코드(`combat-core/`)를 수정했다면 다시 빌드하세요.
+
+```bash
+rustup target add wasm32-unknown-unknown   # 최초 1회
+npm run build:wasm                          # cargo build → src/sim/wasm/에 복사
+```
+
+## 아키텍처
+
+```
+TypeScript (UI·렌더링·경제·AI)              Rust → WASM (전투 연산)
+┌────────────────────────────┐            ┌─────────────────────────────┐
+│ main.ts  게임 루프          │            │ combat-core/src/world.rs     │
+│ view/    2D·3D 화면         │  숫자 ABI  │  타겟팅·이동·피해·종족 특성    │
+│ sim/combat.ts  얇은 래퍼 ───┼──────────▶│  1인칭 빙의 이동·사격          │
+│   (스냅샷 → JS 엔티티 동기화) │◀──────────┼─ lib.rs  스냅샷·이벤트 버퍼    │
+└────────────────────────────┘ 공유 메모리 └─────────────────────────────┘
+```
+
+- wasm-bindgen 없이 숫자만 주고받는 C ABI라서, 빌드 도구는 `cargo` 하나면 됩니다.
+- Rust가 상태를 소유하고, JS는 매 스텝 공유 메모리의 스냅샷(엔티티당 f64 10개)과 이벤트(4개)를 읽습니다.
+
+### 성능 (Node 22, 1/30초 스텝 평균)
+
+| 유닛 수 | TypeScript | Rust WASM | 배율 |
+|---|---|---|---|
+| 100 | 0.17 ms | 0.08 ms | 2.1× |
+| 500 | 1.61 ms | 0.78 ms | 2.1× |
+| 2,000 | 26.78 ms | 11.04 ms | 2.4× |
+
+두 구현에 같은 최적화(sqrt 생략 충돌 검사)를 적용한 공정 비교입니다.
+처음에는 Rust 쪽이 2~3배 느렸는데, `f64::hypot`이 WASM에서 소프트웨어 구현(libm)으로 컴파일되기 때문이었습니다.
+`sqrt`(네이티브 `f64.sqrt`)로 바꿔 해결했습니다.
+2,000기에서는 O(n²) 탐색이 병목이라, 다음 단계로 공간 분할 그리드를 넣으면 크게 줄일 수 있습니다.
 
 ## 플레이
 
@@ -64,7 +100,7 @@ npm run build   # tsc 타입 검사 + 번들
 | 기본 보병 | Trooper | Skitter | Warden |
 | 원거리 | Lancer | Spitter | Arc Sentinel |
 
-수치는 `src/data/factions.js`, 피해 규칙은 `src/data/rules.js`에서 조정합니다.
+수치는 `src/data/factions.ts`, 피해 규칙은 `combat-core/src/world.rs`(`DamageType::multiplier`, `apply_damage`)에서 조정합니다.
 
 | 공격 타입 | small | medium | large |
 |---|---|---|---|
@@ -80,16 +116,21 @@ npm run build   # tsc 타입 검사 + 번들
 rts-3d/
 ├── index.html
 ├── tsconfig.json
+├── combat-core/           # Rust 전투 코어
+│   ├── Cargo.toml
+│   └── src/
+│       ├── world.rs       # 전투 로직 + 단위 테스트
+│       └── lib.rs         # WASM 숫자 ABI (스냅샷·이벤트 버퍼)
 ├── src/
 │   ├── main.ts            # 게임 루프, 2D↔3D 전환, 1인칭 입력 적용
 │   ├── types.ts           # 공통 타입
 │   ├── style.css
 │   ├── data/
-│   │   ├── factions.ts    # 종족·건물·유닛 스펙
-│   │   └── rules.ts       # 피해 계산
-│   ├── sim/               # 렌더링과 분리된 순수 로직 (테스트 대상, 추후 Rust/WASM 이전 후보)
+│   │   └── factions.ts    # 종족·건물·유닛 스펙
+│   ├── sim/               # 렌더링과 분리된 순수 로직 (테스트 대상)
 │   │   ├── economy.ts     # 자원·건설·생산 큐·인구수
-│   │   ├── combat.ts      # 타겟팅·이동·공격·종족 특성·빙의 이동/사격
+│   │   ├── combat.ts      # Rust WASM 래퍼 (같은 API 유지)
+│   │   ├── wasm/combat_core.wasm  # 빌드 결과물
 │   │   └── ai.ts          # 적 운영 + 웨이브
 │   └── view/
 │       ├── icons.ts       # 2D 아이콘 (2D 맵과 3D 빌보드가 공유)
@@ -103,7 +144,7 @@ rts-3d/
 
 - 1인칭 전용 연출 (무기 모델, 피격 흔들림, 발소리)
 - 부대 지정 (Ctrl+1~9)
-- 유닛 수가 많아지면 `sim/`을 Rust → WASM으로 이전
+- 공간 분할 그리드로 타겟 탐색·충돌을 O(n²) → O(n)에 가깝게
 - 2단계 테크 (공중 유닛, 업그레이드)
 - 밸런스 시뮬레이터 (종족 간 동일 자원 교전 승률 표)
 - 2D 컨셉아트 → 3D 모델 교체
