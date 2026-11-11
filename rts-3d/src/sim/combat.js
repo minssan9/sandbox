@@ -12,7 +12,8 @@ const REPAIR_DELAY = 10;
 let nextId = 1;
 
 export function createWorld() {
-  return { time: 0, entities: [], events: [] };
+  // lastCombatAt/lastCombatPos: 교전 감지용 (3D 자동 전환 트리거)
+  return { time: 0, entities: [], events: [], lastCombatAt: -999, lastCombatPos: { x: 0, z: 0 } };
 }
 
 export function spawnStructure(world, team, factionId, type) {
@@ -37,19 +38,44 @@ export function spawnUnit(world, team, factionId, unitType) {
     size: def.size, radius: RADIUS[def.size],
     hp: def.hp, maxHp: def.hp, shield: def.shield, maxShield: def.shield,
     armor: def.armor, speed: def.speed, attack: def.attack, supply: def.supply,
-    cooldownLeft: 0, lastHitAt: -999, dead: false, targetId: null,
+    cooldownLeft: 0, lastHitAt: -999, dead: false, targetId: null, forcedTargetId: null,
     order: { mode: 'hold', x: rally.x, z: rally.z },
   };
   world.entities.push(e);
   return e;
 }
 
+/**
+ * 개별 유닛 명령
+ * - move: 적을 무시하고 이동, 도착 후 그 자리 방어(hold)
+ * - attack: 공격 이동 (가는 길의 적과 교전)
+ * - hold: 지점 방어 (사거리 내 적만 교전 후 복귀)
+ * - target: 특정 적 집중 공격 (targetId 필요)
+ */
+export function orderUnits(world, ids, order) {
+  const set = new Set(ids);
+  for (const e of world.entities) {
+    if (!set.has(e.id) || e.kind !== 'unit' || e.dead) continue;
+    e.targetId = null;
+    if (order.mode === 'target') {
+      e.forcedTargetId = order.targetId;
+      continue;
+    }
+    e.forcedTargetId = null;
+    e.order = { mode: order.mode, x: order.x ?? e.x, z: order.z ?? e.z };
+  }
+}
+
 /** 팀 전체 명령: 'attack'(적 본진으로 진격) | 'hold'(집결지 방어) */
 export function orderTeam(world, team, mode) {
   const dest = mode === 'attack' ? HQ_POS[1 - team] : RALLY_POS[team];
-  for (const e of world.entities) {
-    if (e.team === team && e.kind === 'unit' && !e.dead) e.order = { mode, x: dest.x, z: dest.z };
-  }
+  const ids = world.entities.filter((e) => e.team === team && e.kind === 'unit').map((e) => e.id);
+  orderUnits(world, ids, { mode, x: dest.x, z: dest.z });
+}
+
+/** 마지막 교전 후 quietFor초가 지나지 않았으면 교전 중 */
+export function inCombat(world, quietFor = 4) {
+  return world.time - world.lastCombatAt < quietFor;
 }
 
 const dist = (a, b) => Math.hypot(a.x - b.x, a.z - b.z);
@@ -115,10 +141,25 @@ export function stepCombat(world, dt) {
     if (e.kind !== 'unit') continue;
 
     e.cooldownLeft = Math.max(0, e.cooldownLeft - dt);
-    let target = byId.get(e.targetId);
-    if (!target || target.dead || dist(e, target) - target.radius > AGGRO_RANGE * 1.5) {
-      target = findTarget(world, e);
-      e.targetId = target?.id ?? null;
+    let target = null;
+
+    const forced = e.forcedTargetId != null ? byId.get(e.forcedTargetId) : null;
+    if (forced && !forced.dead) {
+      target = forced;
+    } else {
+      e.forcedTargetId = null;
+      if (e.order.mode === 'move') {
+        // 이동 명령: 적 무시, 도착하면 그 자리 방어
+        moveToward(e, e.order.x, e.order.z, dt);
+        if (Math.hypot(e.order.x - e.x, e.order.z - e.z) < 0.6) e.order.mode = 'hold';
+      } else {
+        target = byId.get(e.targetId);
+        if (!target || target.dead || dist(e, target) - target.radius > AGGRO_RANGE * 1.5) {
+          target = findTarget(world, e);
+          e.targetId = target?.id ?? null;
+        }
+        if (!target) moveToward(e, e.order.x, e.order.z, dt);
+      }
     }
 
     if (target) {
@@ -131,10 +172,10 @@ export function stepCombat(world, dt) {
         target.hp = r.hp;
         target.lastHitAt = world.time;
         e.cooldownLeft = e.attack.cooldown;
+        world.lastCombatAt = world.time;
+        world.lastCombatPos = { x: (e.x + target.x) / 2, z: (e.z + target.z) / 2 };
         world.events.push({ type: 'shot', from: e.id, to: target.id, ranged: e.attack.range > 2 });
       }
-    } else {
-      moveToward(e, e.order.x, e.order.z, dt);
     }
     e.x = Math.max(-MAP.halfX, Math.min(MAP.halfX, e.x));
     e.z = Math.max(-MAP.halfZ, Math.min(MAP.halfZ, e.z));

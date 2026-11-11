@@ -33,16 +33,30 @@ button.primary:hover { background: #0077ed; }
 .card b { font-size: 21px; }
 .card small { font-size: 14px; text-align: center; }
 
-/* 게임 레이아웃: 좌 2D 운영 / 우 3D 전투 */
-.game { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
-.ops { overflow-y: auto; padding: 16px; border-right: 1px solid var(--line); background: #fff; }
-.battle { position: relative; min-height: 0; }
+/* 게임 레이아웃: 운영 모드(2D) ↔ 전투 모드(3D) */
+.game { min-height: 100vh; }
+.game.mode-ops { display: grid; grid-template-columns: 380px 1fr; }
+.game.mode-ops .battle { display: none; }
+.game.mode-battle .ops, .game.mode-battle .field { display: none; }
+.ops { overflow-y: auto; height: 100vh; padding: 16px; border-right: 1px solid var(--line); background: #fff; }
+.field { padding: 16px 24px; background: #fff; min-width: 0; }
+.battle { position: fixed; inset: 0; }
 .battle canvas { display: block; }
+.battle.armed canvas { cursor: crosshair; }
 @media (max-width: 860px) {
-  .game { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
-  .battle { order: -1; height: 55vh; }
-  .ops { border-right: none; }
+  .game.mode-ops { grid-template-columns: 1fr; }
+  .ops { height: auto; border-right: none; border-bottom: 1px solid var(--line); }
+  .field { padding: 16px; }
 }
+
+.field-head { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; }
+.field-head h3 { font-size: 21px; margin: 0; }
+.field-head .primary { flex-direction: row; align-items: baseline; gap: 6px; }
+.field-head .primary small { color: rgba(255,255,255,.75); }
+.fieldmap { width: 100%; display: block; border-radius: 14px; cursor: pointer; }
+.toggle { font-size: 13px; color: var(--sub); display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+.badge { font-size: 12px; padding: 3px 10px; border-radius: 999px; background: var(--panel); color: var(--sub); }
+.badge.alert { background: #ff3b30; color: #fff; }
 
 .resbar { display: flex; gap: 16px; font-size: 15px; margin-bottom: 12px; }
 .resbar span { display: inline-flex; align-items: center; gap: 6px; color: var(--sub); }
@@ -71,7 +85,28 @@ button.primary:hover { background: #0077ed; }
   padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(0,0,0,.06);
   font-variant-numeric: tabular-nums;
 }
-.hud button { flex-direction: row; margin-left: auto; }
+.hud .spacer { flex: 1; background: none; border: none; backdrop-filter: none; padding: 0; }
+.hud button { flex-direction: row; align-items: baseline; gap: 6px; }
+.hud button.primary { background: var(--accent); color: #fff; }
+.hud button small { color: inherit; opacity: .7; }
+.hud .dot { margin: 0 4px 0 2px; }
+.hud .badge.alert { background: #ff3b30; color: #fff; }
+
+.banner {
+  position: absolute; top: 64px; left: 50%; transform: translateX(-50%); z-index: 2;
+  background: #1d1d1f; color: #fff; padding: 10px 18px; border-radius: 999px; font-size: 14px;
+}
+.dock {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2;
+  display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center;
+  background: rgba(255,255,255,.86); backdrop-filter: blur(16px);
+  border: 1px solid rgba(0,0,0,.06); border-radius: 16px; padding: 10px 12px;
+}
+.dock .group { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.dock .label { font-size: 12px; color: var(--sub); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.dock button { padding: 6px 10px; font-size: 13px; }
+.dock .keys { flex-basis: 100%; margin: 0; font-size: 11px; color: var(--sub); }
+.selbox { position: absolute; z-index: 1; border: 1px solid #34c759; background: rgba(52,199,89,.12); pointer-events: none; }
 .overlay {
   position: absolute; inset: 0; z-index: 3; display: grid; place-items: center;
   background: rgba(255,255,255,.6); backdrop-filter: blur(8px); text-align: center;
