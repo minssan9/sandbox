@@ -1,0 +1,82 @@
+:root {
+  --bg: #ffffff;
+  --panel: #f5f5f7;
+  --line: #e5e5ea;
+  --text: #1d1d1f;
+  --sub: #6e6e73;
+  --accent: #0071e3;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+button {
+  font: inherit; color: var(--text); background: #fff;
+  border: 1px solid var(--line); border-radius: 10px;
+  padding: 8px 12px; cursor: pointer; transition: background .15s;
+  display: inline-flex; flex-direction: column; align-items: flex-start; gap: 2px;
+}
+button:hover:not(:disabled) { background: #fafafa; border-color: #d2d2d7; }
+button:disabled { opacity: .4; cursor: default; }
+button small { color: var(--sub); font-size: 11px; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button.primary:hover { background: #0077ed; }
+
+/* 종족 선택 */
+.select { max-width: 880px; margin: 0 auto; padding: 72px 16px; text-align: center; }
+.select h1 { font-size: 48px; font-weight: 700; letter-spacing: -0.02em; margin: 0 0 8px; }
+.select > p { color: var(--sub); font-size: 19px; margin: 0 0 48px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+.card { align-items: center; padding: 28px 20px; border-radius: 18px; background: var(--panel); border: none; gap: 8px; }
+.card:hover:not(:disabled) { background: #ececf0; }
+.card b { font-size: 21px; }
+.card small { font-size: 14px; text-align: center; }
+
+/* 게임 레이아웃: 좌 2D 운영 / 우 3D 전투 */
+.game { display: grid; grid-template-columns: 380px 1fr; height: 100vh; }
+.ops { overflow-y: auto; padding: 16px; border-right: 1px solid var(--line); background: #fff; }
+.battle { position: relative; min-height: 0; }
+.battle canvas { display: block; }
+@media (max-width: 860px) {
+  .game { grid-template-columns: 1fr; grid-template-rows: 55vh auto; height: auto; }
+  .battle { order: -1; height: 55vh; }
+  .ops { border-right: none; }
+}
+
+.resbar { display: flex; gap: 16px; font-size: 15px; margin-bottom: 12px; }
+.resbar span { display: inline-flex; align-items: center; gap: 6px; color: var(--sub); }
+.resbar b { color: var(--text); font-variant-numeric: tabular-nums; }
+.dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.dot.ore { background: #60a5fa; }
+.dot.gas { background: #34d399; border-radius: 50%; }
+.basemap { width: 100%; aspect-ratio: 3 / 2; border-radius: 14px; border: 1px solid var(--line); cursor: pointer; }
+
+.section { margin-top: 16px; }
+.section h3 { font-size: 13px; font-weight: 600; color: var(--sub); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 8px; }
+.section h3 small { text-transform: none; font-weight: 400; margin-left: 6px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+.hint { color: var(--sub); font-size: 13px; }
+.queue { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.queue span { font-size: 12px; padding: 3px 8px; border-radius: 999px; background: var(--panel); color: var(--sub); }
+.queue span.active { background: var(--accent); color: #fff; }
+.msg { min-height: 20px; font-size: 13px; color: #ff3b30; margin: 12px 0 0; }
+
+.hud {
+  position: absolute; top: 12px; left: 12px; right: 12px; z-index: 2;
+  display: flex; gap: 8px; flex-wrap: wrap; pointer-events: none;
+}
+.hud > * {
+  pointer-events: auto; background: rgba(255,255,255,.82); backdrop-filter: blur(12px);
+  padding: 6px 12px; border-radius: 999px; font-size: 13px; border: 1px solid rgba(0,0,0,.06);
+  font-variant-numeric: tabular-nums;
+}
+.hud button { flex-direction: row; margin-left: auto; }
+.overlay {
+  position: absolute; inset: 0; z-index: 3; display: grid; place-items: center;
+  background: rgba(255,255,255,.6); backdrop-filter: blur(8px); text-align: center;
+}
+.overlay h2 { font-size: 56px; margin: 0; }
+.overlay p { color: var(--sub); }
+.overlay button { align-items: center; }
+.hidden { display: none; }
