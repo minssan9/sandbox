@@ -1,7 +1,9 @@
 // 2D 운영 화면: 기지 맵(캔버스) + 건설/생산/일꾼 배치 패널
-import { FACTIONS } from '../data/factions.js';
-import { supplyCap, gasCapacity, canAfford } from '../sim/economy.js';
-import { drawIcon } from './icons.js';
+import { FACTIONS } from '../data/factions.ts';
+import { supplyCap, gasCapacity, canAfford } from '../sim/economy.ts';
+import type { Building, Economy } from '../sim/economy.ts';
+import type { BuildingType, Cost, Result, UnitType } from '../types.ts';
+import { drawIcon } from './icons.ts';
 
 const W = 360;
 const H = 240;
@@ -10,10 +12,24 @@ const MINERALS = Array.from({ length: 6 }, (_, i) => ({ x: 48 + (i % 2) * 18, y:
 const GEYSER = { x: 200, y: 32 };
 const SLOTS = Array.from({ length: 12 }, (_, i) => ({ x: 270 + (i % 3) * 32, y: 50 + Math.floor(i / 3) * 44 }));
 
-const fmtCost = (c) => `${c.ore}${c.gas ? ` / ${c.gas}g` : ''}`;
-const fmt1 = (n) => (Number.isInteger(n) ? n : n.toFixed(1));
+const fmtCost = (c: Cost) => `${c.ore}${c.gas ? ` / ${c.gas}g` : ''}`;
+const fmt1 = (n: number) => (Number.isInteger(n) ? n : n.toFixed(1));
 
-export function createBaseView(root, eco, handlers) {
+export interface BaseHandlers {
+  build(type: BuildingType): Result;
+  train(buildingId: number, type: UnitType): Result;
+  moveWorker(target: 'ore' | 'gas'): boolean;
+  order(mode: 'attack' | 'hold'): void;
+}
+
+export interface BaseView {
+  render(t: number, dt: number, armyCount: number): void;
+  say(text: string): void;
+}
+
+type CachedEl = HTMLElement & { _html?: string };
+
+export function createBaseView(root: HTMLElement, eco: Economy, handlers: BaseHandlers): BaseView {
   const faction = FACTIONS[eco.factionId];
   root.innerHTML = `
     <div class="resbar">
@@ -48,23 +64,23 @@ export function createBaseView(root, eco, handlers) {
     <p class="msg" data-r="msg"></p>
   `;
 
-  const $ = (sel) => root.querySelector(sel);
-  const canvas = $('.basemap');
-  const ctx = canvas.getContext('2d');
+  const $ = (sel: string) => root.querySelector(sel) as CachedEl;
+  const canvas = root.querySelector<HTMLCanvasElement>('.basemap')!;
+  const ctx = canvas.getContext('2d')!;
   ctx.scale(2, 2);
   let selectedId = eco.buildings[0].id;
   let msgTimer = 0;
 
-  const setHTML = (el, html) => { if (el._html !== html) { el._html = html; el.innerHTML = html; } };
-  const say = (text) => { $('[data-r="msg"]').textContent = text; msgTimer = 3; };
+  const setHTML = (el: CachedEl, html: string) => { if (el._html !== html) { el._html = html; el.innerHTML = html; } };
+  const say = (text: string) => { $('[data-r="msg"]').textContent = text; msgTimer = 3; };
 
   root.addEventListener('click', (ev) => {
-    const btn = ev.target.closest('button');
+    const btn = (ev.target as HTMLElement).closest('button');
     if (!btn) return;
     const { act, type } = btn.dataset;
-    let res = { ok: true };
-    if (act === 'build') res = handlers.build(type);
-    else if (act === 'train') res = handlers.train(selectedId, type);
+    let res: Result = { ok: true };
+    if (act === 'build') res = handlers.build(type as BuildingType);
+    else if (act === 'train') res = handlers.train(selectedId, type as UnitType);
     else if (act === 'worker-gas') res = handlers.moveWorker('gas') ? { ok: true } : { ok: false, reason: '가스 건물 필요 또는 정원 초과' };
     else if (act === 'worker-ore') res = handlers.moveWorker('ore') ? { ok: true } : { ok: false, reason: '가스 일꾼 없음' };
     else if (act === 'attack' || act === 'hold') { handlers.order(act); say(act === 'attack' ? '적 본진으로 진격!' : '기지 방어 태세'); }
@@ -81,7 +97,7 @@ export function createBaseView(root, eco, handlers) {
     if (hit) { selectedId = hit.b.id; refreshPanel(); }
   });
 
-  function positionedBuildings() {
+  function positionedBuildings(): { b: Building; x: number; y: number; r: number }[] {
     let slot = 0;
     return eco.buildings.map((b) => {
       if (b.type === 'hq') return { b, ...HQ, r: 30 };
@@ -93,7 +109,7 @@ export function createBaseView(root, eco, handlers) {
 
   function refreshPanel() {
     const defs = faction.buildings;
-    setHTML($('[data-slot="build"]'), ['supply', 'gas', 'factory']
+    setHTML($('[data-slot="build"]'), (['supply', 'gas', 'factory'] as const)
       .map((t) => `<button data-act="build" data-type="${t}" ${canAfford(eco, defs[t].cost) ? '' : 'disabled'}>
         ${defs[t].name}<small>${fmtCost(defs[t].cost)}</small></button>`).join(''));
 
@@ -112,7 +128,7 @@ export function createBaseView(root, eco, handlers) {
       .map((j, i) => `<span class="${i === 0 ? 'active' : ''}">${faction.units[j.unitType].name} ${Math.ceil(j.remaining)}s</span>`).join(''));
   }
 
-  function drawMap(t) {
+  function drawMap(t: number) {
     ctx.fillStyle = '#f5f5f7';
     ctx.fillRect(0, 0, W, H);
     ctx.strokeStyle = '#e5e5ea';
@@ -166,16 +182,16 @@ export function createBaseView(root, eco, handlers) {
     }
   }
 
-  function drawWorker(x, y) {
+  function drawWorker(x: number, y: number) {
     drawIcon(ctx, eco.factionId, 'worker', x, y, 5);
   }
 
   let panelTimer = 0;
   return {
-    render(t, dt, armyCount) {
+    render(t: number, dt: number, armyCount: number) {
       drawMap(t);
-      $('[data-r="ore"]').textContent = Math.floor(eco.ore);
-      $('[data-r="gas"]').textContent = Math.floor(eco.gas);
+      $('[data-r="ore"]').textContent = String(Math.floor(eco.ore));
+      $('[data-r="gas"]').textContent = String(Math.floor(eco.gas));
       $('[data-r="supply"]').textContent = `${fmt1(eco.supplyUsed)}/${supplyCap(eco)}`;
       $('[data-r="workers"]').textContent = `광물 ${eco.workersOre} · 가스 ${eco.workersGas}/${gasCapacity(eco)}`;
       $('[data-r="army"]').textContent = `병력 ${armyCount}`;

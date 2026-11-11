@@ -115,3 +115,41 @@ button.primary:hover { background: #0077ed; }
 .overlay p { color: var(--sub); }
 .overlay button { align-items: center; }
 .hidden { display: none; }
+
+/* 1인칭 빙의 HUD */
+.battle.fps .dock { display: none; }
+.battle.fps canvas { cursor: none; }
+.fps-hud { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.crosshair {
+  position: absolute; left: 50%; top: 50%; width: 22px; height: 22px; transform: translate(-50%, -50%);
+  border-radius: 50%; border: 2px solid rgba(255,255,255,.95); box-shadow: 0 0 0 1px rgba(0,0,0,.35);
+  transition: transform .06s, border-color .1s;
+}
+.crosshair::after {
+  content: ''; position: absolute; left: 50%; top: 50%; width: 4px; height: 4px; transform: translate(-50%, -50%);
+  border-radius: 50%; background: #fff; box-shadow: 0 0 0 1px rgba(0,0,0,.35);
+}
+.crosshair.on-target { border-color: #ff3b30; }
+.crosshair.far { border-color: #ff9500; }
+.crosshair.hit { transform: translate(-50%, -50%) scale(1.35); }
+.crosshair.miss { transform: translate(-50%, -50%) rotate(45deg); }
+.aim-info {
+  position: absolute; left: 50%; top: calc(50% + 28px); transform: translateX(-50%);
+  background: rgba(29,29,31,.75); color: #fff; font-size: 12px; padding: 4px 10px; border-radius: 999px; white-space: nowrap;
+}
+.lock-hint {
+  position: absolute; left: 50%; top: calc(50% - 56px); transform: translateX(-50%);
+  background: var(--accent); color: #fff; font-size: 13px; padding: 6px 14px; border-radius: 999px;
+}
+.unit-card {
+  position: absolute; left: 16px; bottom: 16px; width: min(340px, calc(100% - 32px));
+  background: rgba(255,255,255,.86); backdrop-filter: blur(16px); border-radius: 16px;
+  padding: 12px 14px; display: grid; gap: 6px; border: 1px solid rgba(0,0,0,.06);
+}
+.unit-card b { font-size: 15px; }
+.unit-card small { color: var(--sub); font-size: 11px; line-height: 1.5; }
+.meter { height: 6px; border-radius: 3px; background: #e5e5ea; overflow: hidden; }
+.meter i { display: block; height: 100%; width: 100%; }
+.meter.hp i { background: #34c759; }
+.meter.shield i { background: #5ac8fa; }
+.meter.cd i { background: #1d1d1f; }

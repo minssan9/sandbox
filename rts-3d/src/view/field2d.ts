@@ -1,22 +1,25 @@
 // 2D 전략 지도: 전장 전체를 위에서 본 모습. 클릭하면 그 지점으로 3D 전환.
-import { MAP, inCombat } from '../sim/combat.js';
-import { drawIcon } from './icons.js';
+import { MAP, inCombat } from '../sim/combat.ts';
+import type { World } from '../sim/combat.ts';
+import { drawIcon } from './icons.ts';
 
 const PAD = 16;
 
-export function createFieldView(root, { onOpen3D }) {
+export interface FieldView { render(world: World, t: number): void }
+
+export function createFieldView(root: HTMLElement, { onOpen3D }: { onOpen3D: (pt?: { x: number; z: number }) => void }): FieldView {
   root.innerHTML = `
     <div class="field-head">
       <h3>전장</h3>
       <span class="badge" data-f="status">평온</span>
-      <button class="primary" data-f="open">3D로 개입 <small>Tab</small></button>
+      <button class="primary" data-f="open">3D 1인칭 개입 <small>Tab</small></button>
     </div>
     <canvas class="fieldmap"></canvas>
-    <p class="hint">지도를 클릭하면 그 지점의 3D 전장으로 이동합니다.</p>`;
+    <p class="hint">지도를 클릭하면 그 지점에서 가장 가까운 아군 유닛에 1인칭으로 빙의합니다.</p>`;
 
-  const canvas = root.querySelector('canvas');
-  const ctx = canvas.getContext('2d');
-  const status = root.querySelector('[data-f="status"]');
+  const canvas = root.querySelector('canvas')!;
+  const ctx = canvas.getContext('2d')!;
+  const status = root.querySelector<HTMLElement>('[data-f="status"]')!;
   let W = 0, H = 0, scale = 1;
 
   function resize() {
@@ -31,9 +34,9 @@ export function createFieldView(root, { onOpen3D }) {
   }
   new ResizeObserver(resize).observe(canvas);
 
-  const toScreen = (x, z) => [W / 2 + x * scale, H / 2 + z * scale];
+  const toScreen = (x: number, z: number): [number, number] => [W / 2 + x * scale, H / 2 + z * scale];
 
-  root.querySelector('[data-f="open"]').addEventListener('click', () => onOpen3D());
+  root.querySelector('[data-f="open"]')!.addEventListener('click', () => onOpen3D());
   canvas.addEventListener('click', (ev) => {
     const r = canvas.getBoundingClientRect();
     const x = (ev.clientX - r.left - W / 2) / scale;
@@ -42,7 +45,7 @@ export function createFieldView(root, { onOpen3D }) {
   });
 
   return {
-    render(world, t) {
+    render(world: World, t: number) {
       if (!W) resize();
       ctx.fillStyle = '#f5f5f7';
       ctx.fillRect(0, 0, W, H);

@@ -1,7 +1,8 @@
 // 오리지널 3종족 데이터. 구조는 장르 공통(HP/실드/방어력/공격 타입/사거리/인구수), 수치는 자체 설계.
 // trait: 'repair' 건물 수리 | 'regen' 체력 재생 | 'shield' 실드 재생
+import type { Faction, FactionId } from '../types.ts';
 
-export const FACTIONS = {
+export const FACTIONS: Record<FactionId, Faction> = {
   coalition: {
     id: 'coalition',
     name: 'Coalition',
@@ -69,7 +70,7 @@ export const FACTIONS = {
   },
 };
 
-export const FACTION_IDS = Object.keys(FACTIONS);
+export const FACTION_IDS = Object.keys(FACTIONS) as FactionId[];
 
 export const TRAIT_RATES = {
   regen: 0.6,  // HP/s (Swarm 전 유닛)

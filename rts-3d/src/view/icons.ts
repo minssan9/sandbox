@@ -1,7 +1,10 @@
 // 2D 아이콘(스프라이트) 생성기: 2D 운영 화면과 3D 빌보드가 같은 그림을 공유
-import { FACTIONS } from '../data/factions.js';
+import { FACTIONS } from '../data/factions.ts';
+import type { FactionId } from '../types.ts';
 
-function factionShape(ctx, factionId, cx, cy, r) {
+type Ctx = CanvasRenderingContext2D;
+
+function factionShape(ctx: Ctx, factionId: FactionId, cx: number, cy: number, r: number): void {
   ctx.beginPath();
   if (factionId === 'coalition') {
     const s = r * 0.85;
@@ -22,7 +25,7 @@ function factionShape(ctx, factionId, cx, cy, r) {
   ctx.closePath();
 }
 
-function glyph(ctx, type, cx, cy, r) {
+function glyph(ctx: Ctx, type: string, cx: number, cy: number, r: number): void {
   ctx.strokeStyle = '#fff';
   ctx.fillStyle = '#fff';
   ctx.lineWidth = r * 0.14;
@@ -52,7 +55,7 @@ function glyph(ctx, type, cx, cy, r) {
 }
 
 /** 캔버스 컨텍스트에 아이콘을 그림 */
-export function drawIcon(ctx, factionId, type, cx, cy, r, { team = 0 } = {}) {
+export function drawIcon(ctx: Ctx, factionId: FactionId, type: string, cx: number, cy: number, r: number, { team = 0 } = {}): void {
   const color = FACTIONS[factionId].color;
   ctx.save();
   factionShape(ctx, factionId, cx, cy, r);
@@ -65,15 +68,15 @@ export function drawIcon(ctx, factionId, type, cx, cy, r, { team = 0 } = {}) {
   ctx.restore();
 }
 
-const cache = new Map();
+const cache = new Map<string, HTMLCanvasElement>();
 /** 3D 텍스처용 오프스크린 캔버스(캐시) */
-export function iconCanvas(factionId, type, team, px = 128) {
+export function iconCanvas(factionId: FactionId, type: string, team: number, px = 128): HTMLCanvasElement {
   const key = `${factionId}:${type}:${team}:${px}`;
   if (!cache.has(key)) {
     const c = document.createElement('canvas');
     c.width = c.height = px;
-    drawIcon(c.getContext('2d'), factionId, type, px / 2, px / 2, px * 0.42, { team });
+    drawIcon(c.getContext('2d')!, factionId, type, px / 2, px / 2, px * 0.42, { team });
     cache.set(key, c);
   }
-  return cache.get(key);
+  return cache.get(key)!;
 }
