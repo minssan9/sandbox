@@ -1,0 +1,360 @@
+{
+  "coalition": {
+    "id": "coalition",
+    "name": "Coalition",
+    "desc": "인간 기계문명 · 단단한 방어와 유연한 화력",
+    "color": "#3b82f6",
+    "trait": "repair",
+    "workerIncome": {
+      "ore": 0.9,
+      "gas": 0.8
+    },
+    "buildings": {
+      "hq": {
+        "name": "Command Hub",
+        "hp": 1400,
+        "armor": 1,
+        "cost": {
+          "ore": 400,
+          "gas": 0
+        },
+        "buildTime": 60,
+        "supply": 10,
+        "produces": [
+          "worker"
+        ]
+      },
+      "supply": {
+        "name": "Depot",
+        "hp": 400,
+        "armor": 1,
+        "cost": {
+          "ore": 100,
+          "gas": 0
+        },
+        "buildTime": 20,
+        "supply": 8
+      },
+      "gas": {
+        "name": "Refinery",
+        "hp": 600,
+        "armor": 1,
+        "cost": {
+          "ore": 75,
+          "gas": 0
+        },
+        "buildTime": 20
+      },
+      "factory": {
+        "name": "Garrison",
+        "hp": 900,
+        "armor": 1,
+        "cost": {
+          "ore": 150,
+          "gas": 0
+        },
+        "buildTime": 35,
+        "produces": [
+          "infantry",
+          "ranged"
+        ]
+      }
+    },
+    "units": {
+      "worker": {
+        "name": "Rigger",
+        "hp": 40,
+        "shield": 0,
+        "armor": 0,
+        "size": "small",
+        "speed": 2.8,
+        "supply": 1,
+        "cost": {
+          "ore": 50,
+          "gas": 0
+        },
+        "buildTime": 12
+      },
+      "infantry": {
+        "name": "Trooper",
+        "hp": 45,
+        "shield": 0,
+        "armor": 0,
+        "size": "small",
+        "speed": 2.4,
+        "supply": 1,
+        "cost": {
+          "ore": 50,
+          "gas": 0
+        },
+        "buildTime": 15,
+        "attack": {
+          "damage": 6,
+          "type": "kinetic",
+          "cooldown": 0.9,
+          "range": 4
+        }
+      },
+      "ranged": {
+        "name": "Lancer",
+        "hp": 125,
+        "shield": 0,
+        "armor": 1,
+        "size": "large",
+        "speed": 2.2,
+        "supply": 2,
+        "cost": {
+          "ore": 100,
+          "gas": 25
+        },
+        "buildTime": 22,
+        "attack": {
+          "damage": 20,
+          "type": "explosive",
+          "cooldown": 1.6,
+          "range": 6
+        }
+      }
+    }
+  },
+  "swarm": {
+    "id": "swarm",
+    "name": "Swarm",
+    "desc": "생체 군집 · 값싼 물량과 자가 재생",
+    "color": "#a855f7",
+    "trait": "regen",
+    "workerIncome": {
+      "ore": 0.9,
+      "gas": 0.8
+    },
+    "buildings": {
+      "hq": {
+        "name": "Hive Core",
+        "hp": 1300,
+        "armor": 1,
+        "cost": {
+          "ore": 300,
+          "gas": 0
+        },
+        "buildTime": 60,
+        "supply": 10,
+        "produces": [
+          "worker"
+        ]
+      },
+      "supply": {
+        "name": "Nurture Sac",
+        "hp": 250,
+        "armor": 0,
+        "cost": {
+          "ore": 100,
+          "gas": 0
+        },
+        "buildTime": 18,
+        "supply": 8
+      },
+      "gas": {
+        "name": "Sap Well",
+        "hp": 500,
+        "armor": 1,
+        "cost": {
+          "ore": 50,
+          "gas": 0
+        },
+        "buildTime": 20
+      },
+      "factory": {
+        "name": "Brood Den",
+        "hp": 800,
+        "armor": 1,
+        "cost": {
+          "ore": 150,
+          "gas": 0
+        },
+        "buildTime": 35,
+        "produces": [
+          "infantry",
+          "ranged"
+        ]
+      }
+    },
+    "units": {
+      "worker": {
+        "name": "Mite",
+        "hp": 40,
+        "shield": 0,
+        "armor": 0,
+        "size": "small",
+        "speed": 2.8,
+        "supply": 1,
+        "cost": {
+          "ore": 50,
+          "gas": 0
+        },
+        "buildTime": 12
+      },
+      "infantry": {
+        "name": "Skitter",
+        "hp": 32,
+        "shield": 0,
+        "armor": 0,
+        "size": "small",
+        "speed": 3.4,
+        "supply": 0.5,
+        "cost": {
+          "ore": 25,
+          "gas": 0
+        },
+        "buildTime": 10,
+        "attack": {
+          "damage": 5,
+          "type": "kinetic",
+          "cooldown": 0.6,
+          "range": 0.9
+        }
+      },
+      "ranged": {
+        "name": "Spitter",
+        "hp": 80,
+        "shield": 0,
+        "armor": 0,
+        "size": "medium",
+        "speed": 2.5,
+        "supply": 1,
+        "cost": {
+          "ore": 75,
+          "gas": 25
+        },
+        "buildTime": 18,
+        "attack": {
+          "damage": 10,
+          "type": "kinetic",
+          "cooldown": 1.1,
+          "range": 5
+        }
+      }
+    }
+  },
+  "ascendant": {
+    "id": "ascendant",
+    "name": "Ascendant",
+    "desc": "에너지 고대종 · 소수 정예와 재생 실드",
+    "color": "#eab308",
+    "trait": "shield",
+    "workerIncome": {
+      "ore": 0.9,
+      "gas": 0.8
+    },
+    "buildings": {
+      "hq": {
+        "name": "Sanctum",
+        "hp": 1000,
+        "shield": 1000,
+        "armor": 1,
+        "cost": {
+          "ore": 400,
+          "gas": 0
+        },
+        "buildTime": 60,
+        "supply": 10,
+        "produces": [
+          "worker"
+        ]
+      },
+      "supply": {
+        "name": "Resonator",
+        "hp": 200,
+        "shield": 200,
+        "armor": 0,
+        "cost": {
+          "ore": 100,
+          "gas": 0
+        },
+        "buildTime": 18,
+        "supply": 8
+      },
+      "gas": {
+        "name": "Siphon",
+        "hp": 450,
+        "shield": 450,
+        "armor": 1,
+        "cost": {
+          "ore": 75,
+          "gas": 0
+        },
+        "buildTime": 20
+      },
+      "factory": {
+        "name": "Conclave",
+        "hp": 500,
+        "shield": 500,
+        "armor": 1,
+        "cost": {
+          "ore": 150,
+          "gas": 0
+        },
+        "buildTime": 35,
+        "produces": [
+          "infantry",
+          "ranged"
+        ]
+      }
+    },
+    "units": {
+      "worker": {
+        "name": "Shaper",
+        "hp": 20,
+        "shield": 20,
+        "armor": 0,
+        "size": "small",
+        "speed": 2.8,
+        "supply": 1,
+        "cost": {
+          "ore": 50,
+          "gas": 0
+        },
+        "buildTime": 12
+      },
+      "infantry": {
+        "name": "Warden",
+        "hp": 80,
+        "shield": 60,
+        "armor": 1,
+        "size": "small",
+        "speed": 2.3,
+        "supply": 2,
+        "cost": {
+          "ore": 100,
+          "gas": 0
+        },
+        "buildTime": 24,
+        "attack": {
+          "damage": 16,
+          "type": "kinetic",
+          "cooldown": 1.3,
+          "range": 1
+        }
+      },
+      "ranged": {
+        "name": "Arc Sentinel",
+        "hp": 80,
+        "shield": 80,
+        "armor": 1,
+        "size": "large",
+        "speed": 2.2,
+        "supply": 2,
+        "cost": {
+          "ore": 125,
+          "gas": 50
+        },
+        "buildTime": 28,
+        "attack": {
+          "damage": 18,
+          "type": "plasma",
+          "cooldown": 1.4,
+          "range": 5.5
+        }
+      }
+    }
+  }
+}

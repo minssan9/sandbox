@@ -1,0 +1,19 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+description = "Three Fronts authoritative multiplayer game server"
+publish = false
+
+[dependencies]
+combat-core = { path = "../combat-core" }
+axum = { version = "0.8", features = ["ws"] }
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+futures-util = "0.3"
+rand = "0.8"
+tower-http = { version = "0.6", features = ["fs"] }
+
+[dev-dependencies]
+tokio-tungstenite = "0.26"

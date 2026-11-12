@@ -1,0 +1,25 @@
+{
+  "name": "three-fronts",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "dev": "vite",
+    "build:wasm": "cargo build --release --target wasm32-unknown-unknown -p combat-core && mkdir -p src/sim/wasm && cp target/wasm32-unknown-unknown/release/combat_core.wasm src/sim/wasm/",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc",
+    "test": "node --test test/*.test.ts",
+    "test:rust": "cargo test --workspace"
+  },
+  "dependencies": {
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "@types/three": "^0.170.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.11"
+  },
+  "type": "module",
+  "private": true
+}
