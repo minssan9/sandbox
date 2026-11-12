@@ -1,6 +1,6 @@
 // 2D 운영 화면: 기지 맵(캔버스) + 건설/생산/일꾼 배치 패널
 import { FACTIONS } from '../data/factions.ts';
-import { supplyCap, gasCapacity, canAfford } from '../sim/economy.ts';
+import { supplyCap, gasCapacity, canAfford, UNIT_CAP } from '../sim/economy.ts';
 import type { Building, Economy } from '../sim/economy.ts';
 import type { BuildingType, Cost, Result, UnitType } from '../types.ts';
 import { drawIcon } from './icons.ts';
@@ -36,6 +36,7 @@ export function createBaseView(root: HTMLElement, eco: Economy, handlers: BaseHa
       <span><i class="dot ore"></i><b data-r="ore">0</b></span>
       <span><i class="dot gas"></i><b data-r="gas">0</b></span>
       <span>인구 <b data-r="supply">0/0</b></span>
+      <span>유닛 <b data-r="army">0/100</b></span>
     </div>
     <canvas class="basemap" width="${W * 2}" height="${H * 2}"></canvas>
     <div class="section">
@@ -55,7 +56,7 @@ export function createBaseView(root: HTMLElement, eco: Economy, handlers: BaseHa
       <div class="queue" data-slot="queue"></div>
     </div>
     <div class="section">
-      <h3>군대 명령 <small data-r="army"></small></h3>
+      <h3>군대 명령 <small data-r="armyAlive"></small></h3>
       <div class="btns">
         <button class="primary" data-act="attack">공격 진격</button>
         <button data-act="hold">기지 방어</button>
@@ -194,7 +195,8 @@ export function createBaseView(root: HTMLElement, eco: Economy, handlers: BaseHa
       $('[data-r="gas"]').textContent = String(Math.floor(eco.gas));
       $('[data-r="supply"]').textContent = `${fmt1(eco.supplyUsed)}/${supplyCap(eco)}`;
       $('[data-r="workers"]').textContent = `광물 ${eco.workersOre} · 가스 ${eco.workersGas}/${gasCapacity(eco)}`;
-      $('[data-r="army"]').textContent = `병력 ${armyCount}`;
+      $('[data-r="armyAlive"]').textContent = `병력 ${armyCount}`;
+      $('[data-r="army"]').textContent = `${eco.army}/${UNIT_CAP}`;
       panelTimer -= dt;
       if (panelTimer <= 0) { panelTimer = 0.25; refreshPanel(); }
       if (msgTimer > 0) { msgTimer -= dt; if (msgTimer <= 0) $('[data-r="msg"]').textContent = ''; }

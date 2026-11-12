@@ -10,6 +10,7 @@
   background: var(--bg);
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; }
 button {
   font: inherit; color: var(--text); background: #fff;
@@ -153,3 +154,22 @@ button.primary:hover { background: #0077ed; }
 .meter.hp i { background: #34c759; }
 .meter.shield i { background: #5ac8fa; }
 .meter.cd i { background: #1d1d1f; }
+
+/* 메뉴: 모드 선택 · 로비 */
+.segmented { display: inline-flex; background: var(--panel); border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 28px; }
+.segmented button { border: none; background: transparent; flex-direction: row; align-items: baseline; gap: 6px; padding: 8px 16px; }
+.segmented button.on { background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+.card.picked { outline: 2px solid var(--accent); background: #fff; }
+.lobby { display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 28px; flex-wrap: wrap; }
+.lobby button { flex-direction: row; align-items: center; padding: 10px 18px; }
+.lobby .or { color: var(--sub); font-size: 13px; }
+.lobby input {
+  font: inherit; font-size: 18px; letter-spacing: .2em; text-transform: uppercase; text-align: center;
+  width: 120px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; outline: none;
+}
+.lobby input:focus { border-color: var(--accent); }
+.select .msg { color: #ff3b30; min-height: 20px; margin-top: 16px; }
+.select .hint { color: var(--sub); margin-top: 24px; }
+.waiting { font-size: 19px; color: var(--sub); margin: 48px 0 24px; line-height: 1.8; }
+.waiting .code { display: inline-block; font-size: 48px; color: var(--text); letter-spacing: .15em; margin: 8px 0; }
+.select > button { align-items: center; }

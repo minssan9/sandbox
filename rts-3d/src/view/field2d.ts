@@ -1,13 +1,16 @@
 // 2D 전략 지도: 전장 전체를 위에서 본 모습. 클릭하면 그 지점으로 3D 전환.
 import { MAP, inCombat } from '../sim/combat.ts';
-import type { World } from '../sim/combat.ts';
+import type { ViewWorld as World } from '../session/session.ts';
 import { drawIcon } from './icons.ts';
 
 const PAD = 16;
 
 export interface FieldView { render(world: World, t: number): void }
 
-export function createFieldView(root: HTMLElement, { onOpen3D }: { onOpen3D: (pt?: { x: number; z: number }) => void }): FieldView {
+export function createFieldView(
+  root: HTMLElement,
+  { onOpen3D, playerTeam = 0 }: { onOpen3D: (pt?: { x: number; z: number }) => void; playerTeam?: number },
+): FieldView {
   root.innerHTML = `
     <div class="field-head">
       <h3>전장</h3>
@@ -70,7 +73,7 @@ export function createFieldView(root: HTMLElement, { onOpen3D }: { onOpen3D: (pt
       for (const e of world.entities) {
         const [sx, sy] = toScreen(e.x, e.z);
         drawIcon(ctx, e.factionId, e.kind === 'structure' ? 'hq' : e.type, sx, sy,
-          e.kind === 'structure' ? unitR * 3 : unitR, { team: e.team });
+          e.kind === 'structure' ? unitR * 3 : unitR, { team: e.team === playerTeam ? 0 : 1 });
       }
     },
   };

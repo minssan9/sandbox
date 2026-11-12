@@ -1,7 +1,7 @@
 import { test, before } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { createEconomy, tickEconomy, queueBuilding, queueUnit, supplyCap, moveWorker } from '../src/sim/economy.ts';
+import { createEconomy, tickEconomy, queueBuilding, queueUnit, supplyCap, moveWorker, releaseUnit, UNIT_CAP } from '../src/sim/economy.ts';
 import {
   initCombatCore, createWorld, spawnUnit, spawnStructure, orderTeam, orderUnits, stepCombat, inCombat,
   possessedMove, possessedFire, setPossessed, debugSet, debugSetAttack,
@@ -55,6 +55,25 @@ test('인구수 초과 시 생산 거부', () => {
   tickEconomy(eco, 40);
   queueUnit(eco, building.id, 'infantry'); queueUnit(eco, building.id, 'infantry'); queueUnit(eco, building.id, 'infantry');
   assert.deepEqual(queueUnit(eco, building.id, 'infantry'), { ok: false, reason: '인구수 부족' });
+});
+
+test('전투 유닛 100기 상한 (일꾼 제외, 사망 시 반환)', () => {
+  const eco = createEconomy('swarm', { ore: 1e6 });
+  for (let i = 0; i < 12; i++) queueBuilding(eco, 'supply');
+  for (let i = 0; i < 25; i++) queueBuilding(eco, 'factory');
+  tickEconomy(eco, 40);
+  eco.supplyUsed = 0; // 인구수 제약을 빼고 유닛 상한만 검증
+  const factories = eco.buildings.filter((b) => b.type === 'factory');
+  let queued = 0;
+  for (const f of factories) for (let k = 0; k < 5; k++) if (queueUnit(eco, f.id, 'infantry').ok) queued++;
+  assert.equal(queued, UNIT_CAP);
+  assert.equal(eco.army, UNIT_CAP);
+  const extra = factories.find((f) => f.queue.length < 5)!;
+  assert.deepEqual(queueUnit(eco, extra.id, 'infantry'), { ok: false, reason: '유닛 한도(100) 도달' });
+  const hq = eco.buildings.find((b) => b.type === 'hq')!;
+  assert.ok(queueUnit(eco, hq.id, 'worker').ok, '일꾼은 상한에 포함되지 않음');
+  releaseUnit(eco, 0.5);
+  assert.ok(queueUnit(eco, extra.id, 'infantry').ok, '사망하면 다시 생산 가능');
 });
 
 test('가스 일꾼은 가스 건물 정원까지만', () => {

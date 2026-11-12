@@ -5,6 +5,8 @@ import type { BuildingType, Cost, FactionId, Result, UnitType } from '../types.t
 export const MAX_SUPPLY = 100;
 export const GAS_WORKERS_PER_BUILDING = 3;
 export const QUEUE_LIMIT = 5;
+/** 플레이어당 전투 유닛 상한 (일꾼 제외, 생산 대기 포함) */
+export const UNIT_CAP = 100;
 
 export interface ProductionJob { unitType: UnitType; remaining: number }
 
@@ -25,6 +27,8 @@ export interface Economy {
   workersOre: number;
   workersGas: number;
   supplyUsed: number;
+  /** 살아있는 + 생산 대기 중인 전투 유닛 수 */
+  army: number;
   buildings: Building[];
 }
 
@@ -39,6 +43,7 @@ export function createEconomy(factionId: FactionId, { ore = 50, workers = 4 } = 
     workersOre: workers,
     workersGas: 0,
     supplyUsed: workers * f.units.worker.supply,
+    army: 0,
     buildings: [],
   };
   eco.buildings.push(makeBuilding(eco, 'hq', true));
@@ -94,11 +99,13 @@ export function queueUnit(eco: Economy, buildingId: number, unitType: UnitType):
   if (!b || !b.done) return { ok: false, reason: '건물이 준비되지 않음' };
   if (!faction.buildings[b.type].produces?.includes(unitType)) return { ok: false, reason: '생산 불가' };
   if (b.queue.length >= QUEUE_LIMIT) return { ok: false, reason: '큐가 가득 참' };
+  if (unitType !== 'worker' && eco.army >= UNIT_CAP) return { ok: false, reason: `유닛 한도(${UNIT_CAP}) 도달` };
   const def = faction.units[unitType];
   if (eco.supplyUsed + def.supply > supplyCap(eco)) return { ok: false, reason: '인구수 부족' };
   if (!canAfford(eco, def.cost)) return { ok: false, reason: '자원 부족' };
   pay(eco, def.cost);
   eco.supplyUsed += def.supply; // 큐에 넣는 순간 예약
+  if (unitType !== 'worker') eco.army++;
   b.queue.push({ unitType, remaining: def.buildTime });
   return { ok: true };
 }
@@ -115,8 +122,10 @@ export function moveWorker(eco: Economy, target: 'ore' | 'gas'): boolean {
   return true;
 }
 
-export function releaseSupply(eco: Economy, amount: number): void {
-  eco.supplyUsed = Math.max(0, eco.supplyUsed - amount);
+/** 전투 유닛 사망 시 인구수와 유닛 수 반환 */
+export function releaseUnit(eco: Economy, supply: number): void {
+  eco.supplyUsed = Math.max(0, eco.supplyUsed - supply);
+  eco.army = Math.max(0, eco.army - 1);
 }
 
 /** 시간 진행. 생산 완료된 전투 유닛 타입 배열 반환 (일꾼은 내부 처리) */

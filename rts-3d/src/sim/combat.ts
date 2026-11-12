@@ -224,7 +224,7 @@ export function orderTeam(world: World, team: Team, mode: 'attack' | 'hold'): vo
 }
 
 /** 마지막 교전 후 quietFor초가 지나지 않았으면 교전 중 */
-export function inCombat(world: World, quietFor = 4): boolean {
+export function inCombat(world: { time: number; lastCombatAt: number }, quietFor = 4): boolean {
   return world.time - world.lastCombatAt < quietFor;
 }
 

@@ -8,7 +8,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { MAP } from '../sim/combat.ts';
-import type { Command, Entity, World } from '../sim/combat.ts';
+import type { Command, Entity } from '../sim/combat.ts';
+import type { ViewWorld as World } from '../session/session.ts';
 import { FACTIONS } from '../data/factions.ts';
 import type { FactionId, Size, Team } from '../types.ts';
 import { iconCanvas } from './icons.ts';
@@ -67,6 +68,8 @@ export interface BattleView {
 
 export function createBattleView(container: HTMLElement, opts: BattleViewOptions): BattleView {
   const { playerTeam, onCommand, onSelect, onPossess } = opts;
+  /** 아군 0 / 적 1 (아이콘 테두리·사격 색상용) */
+  const rel = (team: Team): Team => (team === playerTeam ? 0 : 1);
 
   const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(Math.min(2, window.devicePixelRatio));
@@ -153,7 +156,7 @@ export function createBattleView(container: HTMLElement, opts: BattleViewOptions
       base.position.y = 0.8;
       base.castShadow = true;
       group.add(base);
-      const icon = new THREE.Sprite(new THREE.SpriteMaterial({ map: iconTexture(e.factionId, 'hq', e.team) }));
+      const icon = new THREE.Sprite(new THREE.SpriteMaterial({ map: iconTexture(e.factionId, 'hq', rel(e.team)) }));
       icon.scale.set(3, 3, 1);
       icon.position.y = 3.4;
       group.add(icon);
@@ -162,7 +165,7 @@ export function createBattleView(container: HTMLElement, opts: BattleViewOptions
       aimRadius = e.radius + 0.6;
     } else {
       const s = SPRITE_SIZE[e.size];
-      const icon = new THREE.Sprite(new THREE.SpriteMaterial({ map: iconTexture(e.factionId, e.type, e.team) }));
+      const icon = new THREE.Sprite(new THREE.SpriteMaterial({ map: iconTexture(e.factionId, e.type, rel(e.team)) }));
       icon.scale.set(s, s, 1);
       icon.position.y = s / 2 + 0.1;
       group.add(icon);
@@ -583,7 +586,7 @@ export function createBattleView(container: HTMLElement, opts: BattleViewOptions
           const from = ev.from === possessed
             ? camera.position.clone().add(new THREE.Vector3(0, -0.35, 0))
             : new THREE.Vector3(a.x, 0.9, a.z);
-          addShot(from, new THREE.Vector3(b.x, b.h, b.z), a.team === 0 ? '#0071e3' : '#ff3b30');
+          addShot(from, new THREE.Vector3(b.x, b.h, b.z), a.team === playerTeam ? '#0071e3' : '#ff3b30');
         } else if (ev.type === 'death') {
           const p = lastPos.get(ev.id);
           if (p) addRing(p.x, p.z, '#ff9500');
